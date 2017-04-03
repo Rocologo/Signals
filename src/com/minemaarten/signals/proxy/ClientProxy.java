@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -56,7 +57,7 @@ public class ClientProxy extends CommonProxy{
     }
 
     private void registerItemModels(Item item){
-        List<ItemStack> stacks = new ArrayList<ItemStack>();
+        NonNullList<ItemStack> stacks = NonNullList.create();
         item.getSubItems(item, null, stacks);
         for(ItemStack stack : stacks) {
             ResourceLocation resLoc = new ResourceLocation(Constants.MOD_ID, stack.getUnlocalizedName().substring(5));
@@ -67,7 +68,7 @@ public class ClientProxy extends CommonProxy{
 
     @Override
     public EntityPlayer getPlayer(){
-        return Minecraft.getMinecraft().thePlayer;
+        return Minecraft.getMinecraft().player;
     }
 
     @Override

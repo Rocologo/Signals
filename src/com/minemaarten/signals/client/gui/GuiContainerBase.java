@@ -99,7 +99,7 @@ public class GuiContainerBase<Tile extends TileEntity> extends GuiContainer impl
         drawRect(guiLeft - borderWidth, guiTop - borderWidth, guiLeft + xSize + borderWidth, guiTop + ySize + borderWidth, 0xFF222222);
         drawRect(guiLeft, guiTop, guiLeft + xSize, guiTop + ySize, 0xFF333333);
         for(Slot slot : inventorySlots.inventorySlots) {
-            drawRect(guiLeft + slot.xDisplayPosition, guiTop + slot.yDisplayPosition, guiLeft + slot.xDisplayPosition + 16, guiTop + slot.yDisplayPosition + 16, 0xFF222222);
+            drawRect(guiLeft + slot.xPos, guiTop + slot.yPos, guiLeft + slot.xPos + 16, guiTop + slot.yPos + 16, 0xFF222222);
         }
         GlStateManager.enableTexture2D();
     }

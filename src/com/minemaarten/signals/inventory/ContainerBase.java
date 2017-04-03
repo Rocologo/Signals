@@ -120,15 +120,15 @@ public class ContainerBase<Tile extends TileEntity> extends Container implements
                 var4.onSlotChange(var5, var3);
             }
 
-            if(var5.stackSize == 0) {
+            if(var5.getCount() == 0) {
                 var4.putStack((ItemStack)null);
             } else {
                 var4.onSlotChanged();
             }
 
-            if(var5.stackSize == var3.stackSize) return null;
+            if(var5.getCount() == var3.getCount()) return null;
 
-            var4.onPickupFromSlot(par1EntityPlayer, var5);
+            var4.onTake(par1EntityPlayer, var5);
         }
 
         return var3;
@@ -171,7 +171,7 @@ public class ContainerBase<Tile extends TileEntity> extends Container implements
                 }
             } else if(stackHeld == null) {
                 adjustPhantomSlot(slot, mouseButton, modifier);
-                slot.onPickupFromSlot(player, playerInv.getItemStack());
+                slot.onTake(player, playerInv.getItemStack());
             } else if(slot.isItemValid(stackHeld)) {
                 if(canStacksMerge(stackSlot, stackHeld)) {
                     adjustPhantomSlot(slot, mouseButton, modifier);
@@ -200,18 +200,18 @@ public class ContainerBase<Tile extends TileEntity> extends Container implements
         ItemStack stackSlot = slot.getStack();
         int stackSize;
         if(modifier == 1) {
-            stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
+            stackSize = mouseButton == 0 ? (stackSlot.getCount() + 1) / 2 : stackSlot.getCount() * 2;
         } else {
-            stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
+            stackSize = mouseButton == 0 ? stackSlot.getCount() - 1 : stackSlot.getCount() + 1;
         }
 
         if(stackSize > slot.getSlotStackLimit()) {
             stackSize = slot.getSlotStackLimit();
         }
 
-        stackSlot.stackSize = stackSize;
+        stackSlot.setCount(stackSize);
 
-        if(stackSlot.stackSize <= 0) {
+        if(stackSlot.getCount() <= 0) {
             slot.putStack((ItemStack)null);
         }
     }
@@ -221,12 +221,12 @@ public class ContainerBase<Tile extends TileEntity> extends Container implements
         if(!((IPhantomSlot)slot).canAdjust()) {
             return;
         }
-        int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
+        int stackSize = mouseButton == 0 ? stackHeld.getCount() : 1;
         if(stackSize > slot.getSlotStackLimit()) {
             stackSize = slot.getSlotStackLimit();
         }
         ItemStack phantomStack = stackHeld.copy();
-        phantomStack.stackSize = stackSize;
+        phantomStack.setCount(stackSize);
 
         slot.putStack(phantomStack);
     }

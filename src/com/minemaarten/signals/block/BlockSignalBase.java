@@ -6,6 +6,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -61,7 +62,7 @@ public class BlockSignalBase extends BlockBase{
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
     }
 
@@ -69,7 +70,7 @@ public class BlockSignalBase extends BlockBase{
     public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side){
         if(!(worldIn instanceof WorldServer) || state.getBlock() != this || state.getValue(LAMP_STATUS) != EnumLampStatus.GREEN) return 0;
         TileEntitySignalBase signal = (TileEntitySignalBase)worldIn.getTileEntity(pos);
-        signal.setWorldObj((WorldServer)worldIn);
+        signal.setWorld((WorldServer)worldIn);
         for(RailWrapper rail : signal.getConnectedRails()) {
             for(TileEntitySignalBase s : rail.getSignals().values()) {
                 if(s != signal) {

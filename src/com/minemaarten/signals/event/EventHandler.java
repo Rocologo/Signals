@@ -1,6 +1,7 @@
 package com.minemaarten.signals.event;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,22 +48,22 @@ public class EventHandler implements IWorldEventListener{
 
     @SubscribeEvent
     public void onMinecartInteraction(MinecartInteractEvent event){
-        if(!event.getMinecart().worldObj.isRemote) {
+        if(!event.getMinecart().world.isRemote) {
             ItemStack heldItem = event.getPlayer().getHeldItemMainhand();
             if(heldItem != null) {
                 CapabilityMinecartDestination cap = event.getMinecart().getCapability(CapabilityMinecartDestination.INSTANCE, null);
                 if(cap != null) {
                     if(heldItem.getItem() == ModItems.cartEngine && !cap.isMotorized()) {
                         if(!event.getPlayer().isCreative()) {
-                            heldItem.stackSize--;
-                            if(heldItem.stackSize <= 0) event.getPlayer().setHeldItem(EnumHand.MAIN_HAND, null);
+                            heldItem.shrink(1);
+                            if(heldItem.getCount() <= 0) event.getPlayer().setHeldItem(EnumHand.MAIN_HAND, null);
                         }
                         cap.setMotorized();
-                        event.getPlayer().addChatMessage(new TextComponentTranslation("signals.message.cart_engine_installed"));
+                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentTranslation("signals.message.cart_engine_installed"));
                         event.setCanceled(true);
                     } else if(heldItem.getItem() == ModItems.railConfigurator) {
                         RailCacheManager.syncStationNames((EntityPlayerMP)event.getPlayer());
-                        event.getPlayer().openGui(Signals.instance, CommonProxy.EnumGuiId.MINECART_DESTINATION.ordinal(), event.getPlayer().worldObj, event.getMinecart().getEntityId(), -1, cap.isMotorized() ? 1 : 0);
+                        event.getPlayer().openGui(Signals.instance, CommonProxy.EnumGuiId.MINECART_DESTINATION.ordinal(), event.getPlayer().world, event.getMinecart().getEntityId(), -1, cap.isMotorized() ? 1 : 0);
                         event.setCanceled(true);
                     }
                 }
@@ -131,6 +132,8 @@ public class EventHandler implements IWorldEventListener{
 
     @Override
     public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters){}
+    @Override
+    public void spawnParticle(int particleID, boolean ignoreRange, boolean something, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters){}
 
     @Override
     public void onEntityAdded(Entity entityIn){
@@ -139,7 +142,7 @@ public class EventHandler implements IWorldEventListener{
 
     @Override
     public void onEntityRemoved(Entity entityIn){
-        if(entityIn instanceof EntityMinecart && !entityIn.worldObj.isRemote) {
+        if(entityIn instanceof EntityMinecart && !entityIn.world.isRemote) {
             CapabilityMinecartDestination cap = entityIn.getCapability(CapabilityMinecartDestination.INSTANCE, null);
             if(cap != null) cap.onCartBroken((EntityMinecart)entityIn);
         }

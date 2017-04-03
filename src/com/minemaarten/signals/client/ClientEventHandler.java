@@ -25,7 +25,7 @@ public class ClientEventHandler{
     public void onWorldRender(RenderWorldLastEvent event){
         Tessellator t = Tessellator.getInstance();
         VertexBuffer wr = t.getBuffer();
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         if(player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() != ModItems.railConfigurator) return;
 
         double playerX = player.prevPosX + (player.posX - player.prevPosX) * event.getPartialTicks();
@@ -37,7 +37,7 @@ public class ClientEventHandler{
 
         //Iterable<RailWrapper> rails = RailCacheManager.getInstance(player.worldObj).getAllRails();
         GlStateManager.disableTexture2D();
-        List<TileEntity> tes = player.worldObj.loadedTileEntityList;
+        List<TileEntity> tes = player.world.loadedTileEntityList;
         wr.setTranslation(0, 0, 0);
         wr.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
         //for(RailWrapper rail : rails) {

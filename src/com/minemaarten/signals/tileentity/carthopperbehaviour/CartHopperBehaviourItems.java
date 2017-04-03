@@ -38,9 +38,9 @@ public class CartHopperBehaviourItems implements ICartHopperBehaviour<IItemHandl
             ItemStack extracted = from.extractItem(i, MAX_TRANSFER_RATE - totalExtracted, true);
             if(extracted != null && passesFilters(extracted, filters)) {
                 ItemStack leftover = ItemHandlerHelper.insertItemStacked(to, extracted, false);
-                int leftoverCount = leftover != null ? leftover.stackSize : 0;
+                int leftoverCount = leftover != null ? leftover.getCount() : 0;
 
-                int actuallyExtracted = extracted.stackSize - leftoverCount;
+                int actuallyExtracted = extracted.getCount() - leftoverCount;
                 if(actuallyExtracted > 0) {
                     from.extractItem(i, actuallyExtracted, false);
                     totalExtracted += actuallyExtracted;

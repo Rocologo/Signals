@@ -38,7 +38,7 @@ public class GlassesHUD{
     public void renderTick(TickEvent.RenderTickEvent event){
         if(event.phase == TickEvent.Phase.END) {
             Minecraft mc = FMLClientHandler.instance().getClient();
-            if(mc != null && mc.thePlayer != null) {
+            if(mc != null && mc.player != null) {
                 render2D(event.renderTickTime);
             }
         }
@@ -46,8 +46,8 @@ public class GlassesHUD{
 
     private void render2D(float partialTicks){
         Minecraft minecraft = FMLClientHandler.instance().getClient();
-        EntityPlayer player = minecraft.thePlayer;
-        ItemStack helmetStack = player.inventory.armorInventory[3];
+        EntityPlayer player = minecraft.player;
+        ItemStack helmetStack = player.inventory.armorInventory.get(3);
         if(helmetStack != null && minecraft.inGameHasFocus && helmetStack.getItem() == Items.DIAMOND_HELMET) {
             ScaledResolution sr = new ScaledResolution(minecraft);
             GL11.glDepthMask(false);

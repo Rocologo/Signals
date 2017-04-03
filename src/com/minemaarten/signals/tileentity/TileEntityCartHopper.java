@@ -77,7 +77,7 @@ public class TileEntityCartHopper extends TileEntityBase implements ITickable, I
             boolean notifyNeighbors = shouldPush != pushedLastTick;
             pushedLastTick = shouldPush;
             if(notifyNeighbors) {
-                getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType());
+                getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
             }
         }
     }
