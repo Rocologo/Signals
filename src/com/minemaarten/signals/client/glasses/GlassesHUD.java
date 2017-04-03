@@ -48,7 +48,7 @@ public class GlassesHUD{
         Minecraft minecraft = FMLClientHandler.instance().getClient();
         EntityPlayer player = minecraft.player;
         ItemStack helmetStack = player.inventory.armorInventory.get(3);
-        if(helmetStack != null && minecraft.inGameHasFocus && helmetStack.getItem() == Items.DIAMOND_HELMET) {
+        if(!helmetStack.isEmpty() && minecraft.inGameHasFocus && helmetStack.getItem() == Items.DIAMOND_HELMET) {
             ScaledResolution sr = new ScaledResolution(minecraft);
             GL11.glDepthMask(false);
             GL11.glDisable(GL11.GL_CULL_FACE);

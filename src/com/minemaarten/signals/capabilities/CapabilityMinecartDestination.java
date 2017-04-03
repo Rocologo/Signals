@@ -71,7 +71,7 @@ public class CapabilityMinecartDestination implements IGUITextFieldSensitive{
     private InventoryBasic fuelInv = new InventoryBasic("cartEngineInv", true, 5){
         @Override
         public boolean isItemValidForSlot(int index, ItemStack stack){
-            return stack == null || TileEntityFurnace.isItemFuel(stack);
+            return stack.isEmpty() || TileEntityFurnace.isItemFuel(stack);
         }
     };
     private boolean motorActive;
@@ -262,7 +262,7 @@ public class CapabilityMinecartDestination implements IGUITextFieldSensitive{
             if(fuelLeft == 0) {
                 for(int i = 0; i < fuelInv.getSizeInventory(); i++) {
                     ItemStack fuel = fuelInv.getStackInSlot(i);
-                    if(fuel != null) {
+                    if(!fuel.isEmpty()) {
                         int fuelValue = TileEntityFurnace.getItemBurnTime(fuel);
                         if(fuelValue > 0) {
                             fuel.shrink(1);
@@ -302,7 +302,7 @@ public class CapabilityMinecartDestination implements IGUITextFieldSensitive{
             cart.dropItem(ModItems.cartEngine, 1);
             for(int i = 0; i < fuelInv.getSizeInventory(); i++) {
                 ItemStack fuel = fuelInv.getStackInSlot(i);
-                if(fuel != null) cart.entityDropItem(fuel, 0);
+                if(!fuel.isEmpty()) cart.entityDropItem(fuel, 0);
             }
         }
         travelingBetweenDimensions = false;
@@ -381,15 +381,15 @@ public class CapabilityMinecartDestination implements IGUITextFieldSensitive{
                         TileEntityHopper hopper = (TileEntityHopper)te;
                         for(int i = 0; i < hopper.getSizeInventory(); i++) {
                             ItemStack stack = hopper.getStackInSlot(i);
-                            if(stack != null && getFuelInv().isItemValidForSlot(0, stack)) {
+                            if(!stack.isEmpty() && getFuelInv().isItemValidForSlot(0, stack)) {
                                 InvWrapper invWrapper = new InvWrapper(getFuelInv());
                                 ItemStack inserted = stack.copy();
                                 inserted.setCount(1);
                                 ItemStack left = ItemHandlerHelper.insertItemStacked(invWrapper, inserted, false);
-                                if(left == null) {
+                                if(left.isEmpty()) {
                                     stack.shrink(1);
                                     if(stack.getCount() <= 0) {
-                                        hopper.setInventorySlotContents(i, null);
+                                        hopper.setInventorySlotContents(i, ItemStack.EMPTY);
                                     }
                                     hopper.markDirty();
                                     return true;

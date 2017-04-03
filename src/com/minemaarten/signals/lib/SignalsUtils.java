@@ -69,7 +69,7 @@ public class SignalsUtils {
    public static void writeInventoryToNBT(NBTTagCompound tag, ItemStack[] stacks, String tagName){
        NBTTagList tagList = new NBTTagList();
        for(int i = 0; i < stacks.length; i++) {
-           if(stacks[i] != null) {
+           if(!stacks[i].isEmpty()) {
                NBTTagCompound itemTag = new NBTTagCompound();
                stacks[i].writeToNBT(itemTag);
                itemTag.setByte("Slot", (byte)i);
@@ -97,7 +97,7 @@ public class SignalsUtils {
 
    public static void readInventoryFromNBT(NBTTagCompound tag, ItemStack[] stacks, String tagName){
        for(int i = 0; i < stacks.length; i++) {
-           stacks[i] = null;
+           stacks[i] = ItemStack.EMPTY;
        }
        NBTTagList tagList = tag.getTagList(tagName, 10);
        for(int i = 0; i < tagList.tagCount(); i++) {

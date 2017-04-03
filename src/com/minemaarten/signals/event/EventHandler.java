@@ -50,13 +50,13 @@ public class EventHandler implements IWorldEventListener{
     public void onMinecartInteraction(MinecartInteractEvent event){
         if(!event.getMinecart().world.isRemote) {
             ItemStack heldItem = event.getPlayer().getHeldItemMainhand();
-            if(heldItem != null) {
+            if(!heldItem.isEmpty()) {
                 CapabilityMinecartDestination cap = event.getMinecart().getCapability(CapabilityMinecartDestination.INSTANCE, null);
                 if(cap != null) {
                     if(heldItem.getItem() == ModItems.cartEngine && !cap.isMotorized()) {
                         if(!event.getPlayer().isCreative()) {
                             heldItem.shrink(1);
-                            if(heldItem.getCount() <= 0) event.getPlayer().setHeldItem(EnumHand.MAIN_HAND, null);
+                            if(heldItem.getCount() <= 0) event.getPlayer().setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
                         }
                         cap.setMotorized();
                         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentTranslation("signals.message.cart_engine_installed"));
